@@ -1,0 +1,12 @@
+role,required_skills
+Data Analyst,"Python, SQL, Excel, Statistics, Power BI, Data Visualization"
+SOC Analyst,"Networking, Linux, Cybersecurity, SIEM, Log Analysis, Incident Response"
+Machine Learning Engineer,"Python, Machine Learning, Scikit-learn, TensorFlow, SQL, Git"
+Web Developer,"HTML, CSS, JavaScript, React, Node.js, Git"
+Software Developer,"Python, Java, Data Structures, Algorithms, SQL, Git"
+Cybersecurity Analyst,"Networking, Linux, Cybersecurity, Python, SIEM, Problem Solving"
+Cloud Engineer,"AWS, Linux, Networking, Docker, Kubernetes"
+Information Security Analyst,"Cybersecurity, Risk Assessment, Security Policies, Vulnerability Assessment, Incident Response, Communication"
+DevOps Engineer,"Linux, Git, Docker, Kubernetes, CI/CD, AWS"
+Digital Forensics Analyst,"Digital Forensics, Autopsy, FTK, Volatility, Chain of Custody, Linux, Networking, Incident Response"
+Malware Analyst,"Malware Analysis, Reverse Engineering, Ghidra, IDA Pro, Wireshark, Python, Linux, Assembly"

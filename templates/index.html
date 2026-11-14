@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkillSync AI | Career Recommendation and Skill Gap Analysis</title>
+<meta name="description" content="Upload your resume, get ML-powered role recommendations and see exactly which skills you are missing.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700&display=swap">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='fonts/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/skillsync.css') }}">
+</head>
+<body>
+<a class="skip" href="#analyzer">Skip to analyzer</a>
+<nav class="navbar navbar-expand-lg fixed-top" aria-label="Main">
+ <div class="container">
+  <a class="navbar-brand" href="#top"><svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#00b4d9"/><path d="M9 21l5-5 4 3 6-8" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>SkillSync <span style="color:#00b4d9">AI</span></a>
+  <button class="navbar-toggler" data-toggle="collapse" data-target="#nav" aria-label="Toggle menu"><i class="fa fa-bars"></i></button>
+  <div class="collapse navbar-collapse" id="nav"><ul class="navbar-nav ml-auto">
+   <li class="nav-item"><a class="nav-link" href="#how">How it works</a></li>
+   <li class="nav-item"><a class="nav-link" href="#analyzer">Analyzer</a></li>
+   <li class="nav-item"><a class="nav-link" href="#models">Models</a></li>
+   <li class="nav-item"><a class="nav-link" href="#roles">Roles</a></li>
+   <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+  </ul></div>
+ </div>
+</nav>
+
+<header class="hero" id="top"><div class="container"><div class="row align-items-center">
+ <div class="col-lg-7">
+  <p class="eyebrow" style="color:#5ee0f7">AI &amp; ML minor project</p>
+  <h1>Know your best-fit role. <span>Close the skill gap.</span></h1>
+  <p class="lead">Upload your resume and SkillSync AI predicts suitable job roles with machine learning, then shows exactly which skills you already have and which to learn next.</p>
+  <a href="#analyzer" class="btn btn-brand mr-2">Analyze my resume</a><a href="#models" class="btn btn-ghost">See the models</a>
+  <div class="stats"><div><b id="st-roles">-</b><small>Roles</small></div><div><b id="st-skills">-</b><small>Skills tracked</small></div><div><b id="st-acc">-</b><small>Best model F1</small></div></div>
+ </div>
+ <div class="col-lg-5 mt-5 mt-lg-0"><div class="hero-card" aria-hidden="true">
+  <strong>Sample result</strong>
+  <div class="row-s"><span>SOC Analyst</span><span>46%</span></div><div class="bar"><i style="width:46%"></i></div>
+  <div class="row-s"><span>Cybersecurity Analyst</span><span>16%</span></div><div class="bar"><i style="width:16%"></i></div>
+  <div class="row-s"><span>Digital Forensics Analyst</span><span>15%</span></div><div class="bar"><i style="width:15%"></i></div>
+ </div></div>
+</div></div></header>
+
+<section id="how"><div class="container">
+ <p class="eyebrow">How it works</p><h2 class="sec-title">Four simple steps</h2><p class="sec-sub">From a PDF resume to a personal learning plan in seconds.</p>
+ <div class="row mt-4">
+  <div class="col-md-6 col-lg-3 mb-4"><div class="step"><i class="fa fa-upload"></i><small>STEP 1</small><h4>Upload resume</h4><p>Drop a text-based PDF. It is read in memory and never stored.</p></div></div>
+  <div class="col-md-6 col-lg-3 mb-4"><div class="step"><i class="fa fa-search"></i><small>STEP 2</small><h4>Skills extracted</h4><p>extract_skills() finds listed skills. You can edit the result.</p></div></div>
+  <div class="col-md-6 col-lg-3 mb-4"><div class="step"><i class="fa fa-bullseye"></i><small>STEP 3</small><h4>Roles recommended</h4><p>recommend_roles() ranks roles with scores from the chosen model.</p></div></div>
+  <div class="col-md-6 col-lg-3 mb-4"><div class="step"><i class="fa fa-line-chart"></i><small>STEP 4</small><h4>Skill gap</h4><p>See matched and missing skills, with a priority learning list.</p></div></div>
+ </div>
+</div></section>
+
+<section id="analyzer" class="alt"><div class="container">
+ <p class="eyebrow">Analyzer</p><h2 class="sec-title">Analyze your profile</h2>
+ <div class="row"><div class="col-lg-5">
+  <div class="panel no-print"><h3><span class="badge-n">1</span> Upload resume</h3>
+   <label class="drop" id="drop" for="file" tabindex="0"><i class="fa fa-cloud-upload"></i><p class="mb-1"><strong>Drag and drop your PDF</strong> or click to browse</p><small class="text-muted">PDF only, up to 4 MB</small></label>
+   <input type="file" id="file" accept="application/pdf" hidden>
+   <div id="msg" role="status" aria-live="polite"></div>
+   <p class="small text-muted mt-3 mb-0"><i class="fa fa-lock"></i> Your file is processed in memory and is not saved. No resume? Add skills manually.</p>
+  </div>
+  <div class="panel"><h3><span class="badge-n">2</span> Your skills</h3>
+   <div id="chips" aria-live="polite"><span class="text-muted">No skills yet.</span></div>
+   <form id="addForm" class="d-flex mt-3 no-print" autocomplete="off">
+    <input class="form-control mr-2" id="addSkill" list="skillList" placeholder="Add a skill" aria-label="Add a skill"><datalist id="skillList"></datalist>
+    <button class="btn btn-brand" type="submit">Add</button></form>
+  </div>
+ </div>
+ <div class="col-lg-7">
+  <div class="panel"><h3><span class="badge-n">3</span> Recommended roles</h3>
+   <div class="d-flex align-items-center mb-2 no-print"><label for="model" class="mb-0 mr-2 text-muted">Model</label><select id="model" class="custom-select w-auto"></select></div>
+   <div id="recs"><p class="text-muted mb-0">Add skills to see recommendations.</p></div></div>
+  <div class="panel" id="gapPanel"><h3><span class="badge-n">4</span> Skill gap <span id="gapRole" class="text-muted" style="font-weight:400"></span></h3>
+   <div id="gap"><p class="text-muted mb-0">Select a role above.</p></div></div>
+ </div></div>
+</div></section>
+
+<section id="models"><div class="container">
+ <p class="eyebrow">Machine learning</p><h2 class="sec-title">Model comparison</h2>
+ <p class="sec-sub" id="modelNote"></p>
+ <div class="panel mt-4"><table class="tbl" aria-label="Model comparison"><thead><tr><th>Model</th><th>Accuracy</th><th>F1-score (macro)</th><th></th></tr></thead><tbody id="mbody"></tbody></table>
+ <p class="small text-muted mt-3 mb-0">Training samples are simulated from the roles dataset (random subsets of each role's skills plus noise), so scores describe this dataset and not real hiring outcomes.</p></div>
+</div></section>
+
+<section id="roles" class="alt"><div class="container">
+ <p class="eyebrow">Explore</p><h2 class="sec-title">Roles and required skills</h2>
+ <div class="row mt-4" id="roleGrid"></div>
+</div></section>
+
+<section id="about"><div class="container">
+ <p class="eyebrow">About</p><h2 class="sec-title">SkillSync AI</h2>
+ <p class="sec-sub">A supervised-classification project for AI &amp; ML (MSc Cybersecurity and Digital Forensics, Semester 3). Models: Naive Bayes, Decision Tree and Random Forest, compared on accuracy and F1-score. Tools: Python, Scikit-learn, pdfplumber, Flask.</p>
+ <div class="row mt-4 team">
+  <div class="col-md-4 mb-3"><div class="avatar"><i class="fa fa-user"></i></div><h4>Team member 1</h4><p class="text-muted">Edit in templates/index.html</p></div>
+  <div class="col-md-4 mb-3"><div class="avatar"><i class="fa fa-user"></i></div><h4>Team member 2</h4><p class="text-muted">Role / contribution</p></div>
+  <div class="col-md-4 mb-3"><div class="avatar"><i class="fa fa-user"></i></div><h4>Team member 3</h4><p class="text-muted">Role / contribution</p></div>
+ </div>
+</div></section>
+
+<footer><div class="container d-md-flex justify-content-between">
+ <span>&copy; 2026 SkillSync AI. Academic project.</span>
+ <span>Built with Flask, Scikit-learn, pdfplumber and Bootstrap</span>
+</div></footer>
+
+<script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/skillsync.js') }}"></script>
+</body></html>
