@@ -69,12 +69,8 @@
  </div>
  <div class="col-lg-7">
   <div class="panel"><h3><span class="badge-n">3</span> Recommended roles</h3>
-   <div class="filters no-print">
+   <div class="filters no-print" style="grid-template-columns:minmax(0,300px)">
     <div><label for="model">Model</label><select id="model" class="custom-select"></select></div>
-    <div><label for="loc">Job location (pick a city)</label><input id="loc" class="form-control" list="cityList" placeholder="e.g. Ahmedabad, Gujarat, India"><datalist id="cityList"><option value="Ahmedabad, Gujarat, India"><option value="Gandhinagar, Gujarat, India"><option value="Surat, Gujarat, India"><option value="Vadodara, Gujarat, India"><option value="Mumbai, Maharashtra, India"><option value="Pune, Maharashtra, India"><option value="Bengaluru, Karnataka, India"><option value="Hyderabad, Telangana, India"><option value="Chennai, Tamil Nadu, India"><option value="New Delhi, Delhi, India"><option value="India"></datalist></div>
-    <div><label for="dist">Search radius</label><select id="dist" class="custom-select"><option value="">Default</option><option value="10">10 miles (about 16 km)</option><option value="25">25 miles (about 40 km)</option><option value="50">50 miles (about 80 km)</option><option value="100">100 miles (about 160 km)</option></select></div>
-    <div><label for="lvl">Level</label><select id="lvl" class="custom-select"><option value="">Any</option><option value="1">Internship</option><option value="2">Entry level</option></select></div>
-    <div><label for="wt">Work type</label><select id="wt" class="custom-select"><option value="">Any</option><option value="1">On-site</option><option value="3">Hybrid</option><option value="2">Remote</option></select></div>
    </div>
    <div id="recs"><p class="text-muted mb-0">Add skills to see recommendations.</p></div></div>
   <div class="panel" id="gapPanel"><h3><span class="badge-n">4</span> Skill gap <span id="gapRole" class="text-muted" style="font-weight:400"></span></h3>
