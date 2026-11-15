@@ -5,6 +5,15 @@
   const post = (url, body) => fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).then(r => r.json());
   const note = (text, kind) => { const m = $("msg"); m.innerHTML = ""; if (text) m.appendChild(el("div", "alert-x " + kind, text)); };
 
+  // Opens LinkedIn's own job search for a role (no scraping, no LinkedIn account needed to build the link).
+  const jobsUrl = (role) => {
+    const q = new URLSearchParams({ keywords: role });
+    if ($("loc").value.trim()) q.set("location", $("loc").value.trim());
+    if ($("lvl").value) q.set("f_E", $("lvl").value);
+    return "https://www.linkedin.com/jobs/search/?" + q.toString();
+  };
+  const jobsLink = (role, label) => { const a = el("a", "btn btn-jobs", label || "Find jobs"); a.href = jobsUrl(role); a.target = "_blank"; a.rel = "noopener noreferrer"; a.setAttribute("aria-label", "Find " + role + " jobs on LinkedIn (opens in a new tab)"); return a; };
+
   async function init() {
     st.meta = await (await fetch("/api/meta")).json();
     const m = st.meta, best = m.models.find(x => x.Model === m.best);
@@ -39,7 +48,7 @@
       const row = el("div", "rec" + (r.role === st.role ? " sel" : "")), bar = el("div", "bar"), fill = el("i");
       fill.style.width = r.score + "%"; bar.append(fill);
       const b = el("button", "btn", "Analyze gap"); b.type = "button"; b.onclick = () => { st.role = r.role; recommend(true); };
-      row.append(el("strong", null, r.role + " (" + r.score + "%)"), bar, b); box.append(row);
+      const act = el("div", "acts"); act.append(b, jobsLink(r.role, "Find jobs")); row.append(el("strong", null, r.role + " (" + r.score + "%)"), bar, act); box.append(row);
     });
     if (st.role) gap();
   }
@@ -53,7 +62,7 @@
     const sec = (title, arr, cls) => { box.append(el("h4", "mt-4", title)); const w = el("div"); (arr.length ? arr : ["None"]).forEach(s => w.append(el("span", "chip " + (arr.length ? cls : ""), s))); box.append(w); };
     sec("Matched skills", g.matched, "ok"); sec("Missing skills", g.missing, "bad");
     if (g.priority.length) { box.append(el("h4", "mt-4", "Learning priority")); const ol = el("ol", "road pl-3"); g.priority.forEach(p => { const li = el("li", null, p.skill + " "); li.append(el("small", null, "(needed by " + p.roles + " role" + (p.roles > 1 ? "s" : "") + ")")); ol.append(li); }); box.append(ol); }
-    const pr = el("button", "btn btn-brand mt-3 no-print", "Download report (PDF)"); pr.onclick = () => window.print(); box.append(pr);
+    const bar2 = el("div", "mt-3 no-print"), pr = el("button", "btn btn-brand mr-2", "Download report (PDF)"); pr.onclick = () => window.print(); const jl = jobsLink(st.role, "View " + st.role + " jobs on LinkedIn"); jl.classList.add("mt-2"); bar2.append(pr, jl); box.append(bar2);
   }
 
   async function upload(file) {
@@ -81,5 +90,6 @@
     if (!hit) return note(v ? '"' + v + '" is not in the listed skills.' : "", "err");
     note("", ""); if (!st.skills.includes(hit)) { st.skills.push(hit); st.skills.sort(); } $("addSkill").value = ""; renderChips(); recommend(); };
   $("model").onchange = () => recommend();
+  $("loc").oninput = $("lvl").onchange = () => recommend();
   init();
 })();
