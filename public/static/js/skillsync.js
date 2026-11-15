@@ -5,16 +5,8 @@
   const post = (url, body) => fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).then(r => r.json());
   const note = (text, kind) => { const m = $("msg"); m.innerHTML = ""; if (text) m.appendChild(el("div", "alert-x " + kind, text)); };
 
-  // Opens LinkedIn's own job search for a role (no scraping, no LinkedIn account needed to build the link).
-  const jobsUrl = (role) => {
-    const q = new URLSearchParams({ keywords: role, sortBy: "DD" }); // DD = most recent first
-    const loc = $("loc").value.trim();
-    if (loc) q.set("location", loc);
-    if (loc && $("dist").value) q.set("distance", $("dist").value); // radius in miles
-    if ($("lvl").value) q.set("f_E", $("lvl").value);   // 1 internship, 2 entry level
-    if ($("wt").value) q.set("f_WT", $("wt").value);    // 1 on-site, 2 remote, 3 hybrid
-    return "https://www.linkedin.com/jobs/search/?" + q.toString();
-  };
+  // Opens LinkedIn's own job search for a role. Location and other filters are set on LinkedIn itself.
+  const jobsUrl = (role) => "https://www.linkedin.com/jobs/search/?" + new URLSearchParams({ keywords: role }).toString();
   const jobsLink = (role, label) => { const a = el("a", "btn btn-jobs", label || "Find jobs"); a.href = jobsUrl(role); a.target = "_blank"; a.rel = "noopener noreferrer"; a.setAttribute("aria-label", "Find " + role + " jobs on LinkedIn (opens in a new tab)"); return a; };
 
   async function init() {
@@ -93,6 +85,5 @@
     if (!hit) return note(v ? '"' + v + '" is not in the listed skills.' : "", "err");
     note("", ""); if (!st.skills.includes(hit)) { st.skills.push(hit); st.skills.sort(); } $("addSkill").value = ""; renderChips(); recommend(); };
   $("model").onchange = () => recommend();
-  $("loc").oninput = $("dist").onchange = $("lvl").onchange = $("wt").onchange = () => recommend();
   init();
 })();
