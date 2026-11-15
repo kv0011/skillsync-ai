@@ -8,7 +8,7 @@ from flask import Flask, jsonify, render_template, request
 from gap_analysis import skill_gap
 from model import load_bundle, recommend_roles
 from skills_common import all_skills, load_roles
-from skills_extractor import extract_skills
+from skills_extractor import analyze_pdf
 
 # Static files live in public/ so Vercel serves them from its CDN; locally Flask serves them too.
 app = Flask(__name__, static_folder="public/static", static_url_path="/static")
@@ -38,7 +38,10 @@ def extract():
     data = f.read()
     if not data.startswith(b"%PDF"):
         return jsonify(error="This file is not a valid PDF."), 400
-    return jsonify(skills=extract_skills(io.BytesIO(data)))
+    result = analyze_pdf(io.BytesIO(data))
+    if not result["ok"]:
+        return jsonify(error=result["message"]), 422
+    return jsonify(skills=result["skills"])
 
 
 @app.post("/api/recommend")
