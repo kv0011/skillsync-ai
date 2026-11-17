@@ -18,5 +18,3 @@ Optional: `python model.py` prints the model comparison. Streamlit version:
 - gap_analysis.py: matched and missing skills for a chosen role
 - streamlit_app.py: Streamlit interface
 
-## Deploy on Vercel
-Import the GitHub repo at vercel.com/new and deploy with default settings.
