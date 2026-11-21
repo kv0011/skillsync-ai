@@ -11,14 +11,10 @@
 
   async function init() {
     st.meta = await (await fetch("/api/meta")).json();
-    const m = st.meta, best = m.models.find(x => x.Model === m.best);
+    const m = st.meta;
     $("st-roles").textContent = Object.keys(m.roles).length;
     $("st-skills").textContent = m.skills.length;
-    $("st-acc").textContent = Math.round(best["F1-score (macro)"] * 100) + "%";
     $("skillList").append(...m.skills.map(s => { const o = el("option"); o.value = s; return o; }));
-    $("model").append(...m.models.map(x => { const o = el("option", null, x.Model + (x.Model === m.best ? " (best)" : "")); o.value = x.Model; if (x.Model === m.best) o.selected = true; return o; }));
-    $("modelNote").textContent = `Trained on ${m.n_train} samples and tested on ${m.n_test} held-out samples. The best model by F1-score is used by default.`;
-    $("mbody").append(...m.models.map(x => { const tr = el("tr"); tr.append(el("td", null, x.Model), el("td", null, (x.Accuracy * 100).toFixed(1) + "%"), el("td", null, (x["F1-score (macro)"] * 100).toFixed(1) + "%")); const t = el("td"); if (x.Model === m.best) t.append(el("span", "best", "Best")); tr.append(t); return tr; }));
     const grid = $("roleGrid");
     Object.entries(m.roles).forEach(([role, skills]) => {
       const col = el("div", "col-md-6 col-lg-4 mb-4"), card = el("div", "role"); card.append(el("h4", null, role));
@@ -37,7 +33,7 @@
   async function recommend(keepRole) {
     const box = $("recs");
     if (!st.skills.length) { box.innerHTML = '<p class="text-muted mb-0">Add skills to see recommendations.</p>'; $("gap").innerHTML = '<p class="text-muted mb-0">Select a role above.</p>'; $("gapRole").textContent = ""; return; }
-    const { recommendations } = await post("/api/recommend", { skills: st.skills, model: $("model").value });
+    const { recommendations } = await post("/api/recommend", { skills: st.skills });
     box.innerHTML = "";
     recommendations.forEach(r => {
       const row = el("div", "rec" + (r.role === st.role ? " sel" : "")), bar = el("div", "bar"), fill = el("i");
@@ -84,6 +80,5 @@
   $("addForm").onsubmit = (e) => { e.preventDefault(); const v = $("addSkill").value.trim(), hit = st.meta.skills.find(s => s.toLowerCase() === v.toLowerCase());
     if (!hit) return note(v ? '"' + v + '" is not in the listed skills.' : "", "err");
     note("", ""); if (!st.skills.includes(hit)) { st.skills.push(hit); st.skills.sort(); } $("addSkill").value = ""; renderChips(); recommend(); };
-  $("model").onchange = () => recommend();
   init();
 })();
