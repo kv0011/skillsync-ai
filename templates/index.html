@@ -13,24 +13,25 @@
 <a class="skip" href="#analyzer">Skip to analyzer</a>
 <nav class="navbar navbar-expand-lg fixed-top" aria-label="Main">
  <div class="container">
-  <a class="navbar-brand" href="#top"><svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#00b4d9"/><path d="M9 21l5-5 4 3 6-8" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>SkillSync <span style="color:#00b4d9">AI</span></a>
+  <a class="navbar-brand" href="#top"><svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#178a52"/><path d="M9 21l5-5 4 3 6-8" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>SkillSync <span class="ai">AI</span></a>
   <button class="navbar-toggler" data-toggle="collapse" data-target="#nav" aria-label="Toggle menu"><i class="fa fa-bars"></i></button>
   <div class="collapse navbar-collapse" id="nav"><ul class="navbar-nav ml-auto">
    <li class="nav-item"><a class="nav-link" href="#how">How it works</a></li>
    <li class="nav-item"><a class="nav-link" href="#analyzer">Analyzer</a></li>
-   <li class="nav-item"><a class="nav-link" href="#models">Models</a></li>
    <li class="nav-item"><a class="nav-link" href="#roles">Roles</a></li>
    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+   <li class="nav-item"><a class="btn btn-brand btn-sm nav-cta" href="#analyzer">Analyze resume</a></li>
   </ul></div>
  </div>
 </nav>
 
 <header class="hero" id="top"><div class="container"><div class="row align-items-center">
  <div class="col-lg-7">
+  <p class="pill">Career matching for students</p>
   <h1>Know your best-fit role. <span>Close the skill gap.</span></h1>
   <p class="lead">Upload your resume and SkillSync AI predicts suitable job roles with machine learning, then shows exactly which skills you already have and which to learn next.</p>
-  <a href="#analyzer" class="btn btn-brand mr-2">Analyze my resume</a><a href="#models" class="btn btn-ghost">See the models</a>
-  <div class="stats"><div><b id="st-roles">-</b><small>Roles</small></div><div><b id="st-skills">-</b><small>Skills tracked</small></div><div><b id="st-acc">-</b><small>Best model F1</small></div></div>
+  <a href="#analyzer" class="btn btn-brand">Analyze my resume</a><a href="#how" class="btn btn-ghost">How it works</a>
+  <div class="stats"><div><b id="st-roles">-</b><small>Roles</small></div><div><b id="st-skills">-</b><small>Skills tracked</small></div><div><b>Top 5</b><small>Role matches</small></div></div>
  </div>
  <div class="col-lg-5 mt-5 mt-lg-0"><div class="hero-card" aria-hidden="true">
   <strong>Sample result</strong>
@@ -45,7 +46,7 @@
  <div class="row mt-4">
   <div class="col-md-6 col-lg-3 mb-4"><div class="step"><i class="fa fa-upload"></i><small>STEP 1</small><h4>Upload resume</h4><p>Drop a text-based PDF. It is read in memory and never stored.</p></div></div>
   <div class="col-md-6 col-lg-3 mb-4"><div class="step"><i class="fa fa-search"></i><small>STEP 2</small><h4>Skills extracted</h4><p>extract_skills() finds listed skills. You can edit the result.</p></div></div>
-  <div class="col-md-6 col-lg-3 mb-4"><div class="step"><i class="fa fa-bullseye"></i><small>STEP 3</small><h4>Roles recommended</h4><p>recommend_roles() ranks roles with scores from the chosen model.</p></div></div>
+  <div class="col-md-6 col-lg-3 mb-4"><div class="step"><i class="fa fa-bullseye"></i><small>STEP 3</small><h4>Roles recommended</h4><p>recommend_roles() ranks roles with match scores.</p></div></div>
   <div class="col-md-6 col-lg-3 mb-4"><div class="step"><i class="fa fa-line-chart"></i><small>STEP 4</small><h4>Skill gap</h4><p>See matched and missing skills, with a priority learning list.</p></div></div>
  </div>
 </div></section>
@@ -68,21 +69,12 @@
  </div>
  <div class="col-lg-7">
   <div class="panel"><h3><span class="badge-n">3</span> Recommended roles</h3>
-   <div class="filters no-print" style="grid-template-columns:minmax(0,300px)">
-    <div><label for="model">Model</label><select id="model" class="custom-select"></select></div>
-   </div>
    <div id="recs"><p class="text-muted mb-0">Add skills to see recommendations.</p></div></div>
   <div class="panel" id="gapPanel"><h3><span class="badge-n">4</span> Skill gap <span id="gapRole" class="text-muted" style="font-weight:400"></span></h3>
    <div id="gap"><p class="text-muted mb-0">Select a role above.</p></div></div>
  </div></div>
 </div></section>
 
-<section id="models"><div class="container">
- <p class="eyebrow">Machine learning</p><h2 class="sec-title">Model comparison</h2>
- <p class="sec-sub" id="modelNote"></p>
- <div class="panel mt-4"><table class="tbl" aria-label="Model comparison"><thead><tr><th>Model</th><th>Accuracy</th><th>F1-score (macro)</th><th></th></tr></thead><tbody id="mbody"></tbody></table>
- <p class="small text-muted mt-3 mb-0">Training samples are simulated from the roles dataset (random subsets of each role's skills plus noise), so scores describe this dataset and not real hiring outcomes.</p></div>
-</div></section>
 
 <section id="roles" class="alt"><div class="container">
  <p class="eyebrow">Explore</p><h2 class="sec-title">Roles and required skills</h2>
@@ -91,11 +83,11 @@
 
 <section id="about"><div class="container">
  <p class="eyebrow">About</p><h2 class="sec-title">SkillSync AI</h2>
- <p class="sec-sub">A supervised-classification project for AI &amp; ML (MSc Cybersecurity and Digital Forensics, Semester 3). Models: Naive Bayes, Decision Tree and Random Forest, compared on accuracy and F1-score. Tools: Python, Scikit-learn, pdfplumber, Flask.</p>
+ <p class="sec-sub">A supervised-classification project for AI &amp; ML (MSc Cybersecurity and Digital Forensics, Semester 3). Tools: Python, Scikit-learn, pdfplumber, Flask.</p>
  <div class="row mt-4 team">
-  <div class="col-md-4 mb-3"><div class="avatar"><i class="fa fa-user"></i></div><h4>Keval Patel</h4><p class="text-muted"> </p></div>
-  <div class="col-md-4 mb-3"><div class="avatar"><i class="fa fa-user"></i></div><h4>Mitaliraj Ghosh</h4><p class="text-muted"> </p></div>
-  <div class="col-md-4 mb-3"><div class="avatar"><i class="fa fa-user"></i></div><h4>Aksha Chudasama</h4><p class="text-muted"> </p></div>
+  <div class="col-md-4 mb-3"><div class="avatar"><i class="fa fa-user"></i></div><h4>Team member 1</h4><p class="text-muted">Edit in templates/index.html</p></div>
+  <div class="col-md-4 mb-3"><div class="avatar"><i class="fa fa-user"></i></div><h4>Team member 2</h4><p class="text-muted">Role / contribution</p></div>
+  <div class="col-md-4 mb-3"><div class="avatar"><i class="fa fa-user"></i></div><h4>Team member 3</h4><p class="text-muted">Role / contribution</p></div>
  </div>
 </div></section>
 
