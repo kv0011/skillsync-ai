@@ -13,6 +13,7 @@ from generate_data import generate
 from skills_common import DATA_DIR, all_skills
 
 MODEL_FILE = DATA_DIR / "model.joblib"
+PREFERRED_MODEL = "Random Forest"  # model used by the website; all three are still trained and compared
 
 
 def _split(s):
@@ -28,8 +29,8 @@ def train(save=True) -> dict:
 
     models = {
         "Naive Bayes": BernoulliNB(),
-        "Decision Tree": DecisionTreeClassifier(max_depth=12, random_state=42),
-        "Random Forest": RandomForestClassifier(n_estimators=200, random_state=42),
+        "Decision Tree": DecisionTreeClassifier(max_depth=20, random_state=42),
+        "Random Forest": RandomForestClassifier(n_estimators=100, random_state=42),
     }
     rows = []
     for name, m in models.items():
@@ -39,7 +40,7 @@ def train(save=True) -> dict:
                      "Accuracy": round(accuracy_score(y_te, pred), 4),
                      "F1-score (macro)": round(f1_score(y_te, pred, average="macro"), 4)})
     results = pd.DataFrame(rows)
-    best = results.sort_values(["F1-score (macro)", "Accuracy"], ascending=False).iloc[0]["Model"]
+    best = PREFERRED_MODEL
     bundle = {"models": models, "mlb": mlb, "results": results, "best": best,
               "n_train": len(X_tr), "n_test": len(X_te)}
     if save:
