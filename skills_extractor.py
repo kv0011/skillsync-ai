@@ -11,6 +11,9 @@ ALIASES = {
     "ml": "Machine Learning", "tensor flow": "TensorFlow",
     "ci cd": "CI/CD", "ida": "IDA Pro", "dfir": "Digital Forensics",
     "data viz": "Data Visualization", "k8s": "Kubernetes",
+    "iso/iec 27001": "ISO 27001", "iso 27k": "ISO 27001", "pentesting": "Penetration Testing",
+    "pen testing": "Penetration Testing", "vapt": "Vulnerability Assessment", "kali": "Kali Linux",
+    "mitre attack": "MITRE ATT&CK", "ids": "IDS/IPS", "ips": "IDS/IPS",
 }
 
 
