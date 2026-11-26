@@ -8,7 +8,7 @@ import random
 import pandas as pd
 from skills_common import load_roles, all_skills, DATA_DIR
 
-SAMPLES_PER_ROLE = 250
+SAMPLES_PER_ROLE = 150
 
 
 def generate(samples_per_role=SAMPLES_PER_ROLE, seed=42) -> pd.DataFrame:
